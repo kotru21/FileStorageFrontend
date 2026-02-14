@@ -1,4 +1,4 @@
-import { FileItem } from '@/entities/file'
+import type { FileItem } from '@/entities/file'
 
 export type Folder = {
   id: string
@@ -12,4 +12,5 @@ export type FolderContents = {
   folder: Folder
   folders: Folder[]
   files: FileItem[]
+  breadcrumbs: Folder[]
 }

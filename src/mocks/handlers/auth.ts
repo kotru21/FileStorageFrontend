@@ -1,5 +1,5 @@
 import { http, HttpResponse, delay } from 'msw'
-import { db } from '../data/db'
+import { db, persistUsers } from '../data/db'
 
 const BASE = process.env.NEXT_PUBLIC_API_URL + '/api/v1'
 
@@ -18,7 +18,7 @@ export const authHandlers = [
     const existing = db.users.find((u) => u.email === body.email)
     if (existing) {
       return HttpResponse.json(
-        { error: { code: 'EMAIL_TAKEN', message: 'Email уже зарегистрирован' } },
+        { message: 'Email уже зарегистрирован' },
         { status: 409 },
       )
     }
@@ -31,6 +31,7 @@ export const authHandlers = [
       password: body.password,
     }
     db.users.push(newUser)
+    persistUsers() // Сохраняем в localStorage
 
     // Генерируем токен и сохраняем в Map
     const accessToken = `token_${crypto.randomUUID()}`
@@ -62,7 +63,7 @@ export const authHandlers = [
 
     if (!user) {
       return HttpResponse.json(
-        { error: { code: 'INVALID_CREDENTIALS', message: 'Неверный email или пароль' } },
+        { message: 'Неверный email или пароль' },
         { status: 401 },
       )
     }

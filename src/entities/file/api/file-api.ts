@@ -1,5 +1,5 @@
 import { apiClient } from '@/shared/api/client'
-import { FileItem } from '@/entities/file'
+import { type FileItem } from '@/entities/file'
 
 export const fileApi = {
   upload: (folderId: string, file: File) => {

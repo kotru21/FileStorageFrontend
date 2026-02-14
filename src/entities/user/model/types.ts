@@ -3,3 +3,9 @@ export type User = {
   email: string
   name: string
 }
+
+export type AuthResponse = {
+  user: User
+  accessToken: string
+  refreshToken: string
+}

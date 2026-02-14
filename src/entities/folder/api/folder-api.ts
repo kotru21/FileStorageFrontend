@@ -1,5 +1,5 @@
 import { apiClient } from '@/shared/api/client'
-import { Folder, FolderContents } from '@/entities/folder'
+import type { Folder, FolderContents } from '../model/types'
 
 export const folderApi = {
   getContents: (folderId: string) =>

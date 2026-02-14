@@ -19,15 +19,42 @@ export type MockDB = {
   tokens: Map<string, string>
 }
 
+// Загружаем users из localStorage или используем дефолтных
+function loadUsers() {
+  if (typeof window === 'undefined') return []
+
+  const savedUsers = localStorage.getItem('msw_users')
+  if (savedUsers) {
+    try {
+      return JSON.parse(savedUsers)
+    } catch {
+      return []
+    }
+  }
+  return []
+}
+
+// Сохраняем users в localStorage
+function saveUsers(users: MockDB['users']) {
+  if (typeof window === 'undefined') return
+  localStorage.setItem('msw_users', JSON.stringify(users))
+}
+
+// Инициализируем с загруженными users или дефолтным тестовым
+const initialUsers = loadUsers()
+if (initialUsers.length === 0) {
+  // Добавляем тестового пользователя только если нет сохранённых
+  initialUsers.push({
+    id: 'user_1',
+    email: 'test@example.com',
+    name: 'Test User',
+    password: '123456',
+  })
+  saveUsers(initialUsers)
+}
+
 export const db: MockDB = {
-  users: [
-    {
-      id: 'user_1',
-      email: 'test@example.com',
-      name: 'Test User',
-      password: '123456',
-    },
-  ],
+  users: initialUsers,
   folders: [
     {
       id: 'root',
@@ -115,4 +142,9 @@ export const db: MockDB = {
     },
   ],
   tokens: new Map(),
+}
+
+// Экспортируем функцию для сохранения users после изменений
+export function persistUsers() {
+  saveUsers(db.users)
 }

@@ -1,10 +1,5 @@
 import { apiClient } from '@/shared/api/client'
-
-type AuthResponse = {
-  user: { id: string; email: string; name: string }
-  accessToken: string
-  refreshToken: string
-}
+import { type AuthResponse } from '@/entities/user'
 
 export const authApi = {
   login: (email: string, password: string) =>
